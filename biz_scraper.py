@@ -2,14 +2,13 @@
 import requests
 import time
 from selenium import webdriver
-
-starting_site = 70000
-driver = webdriver.Firefox()
+import sys
+import pandas as pd
 
 def get_ids_we_want(site_numb):
     
     site_url = "https://yuki.la/biz/page/#"
-    driver.get(site_url + site_numb)
+    driver.get(site_url + str(site_numb))
     time.sleep(3)
 
     # manage html
@@ -41,6 +40,19 @@ def get_ids_we_want(site_numb):
     #print(post_ids_we_want)
     return post_ids_we_want
 
+
+last_site = 80555
+driver = webdriver.Firefox()
+
+towD_ids = {}
+for i in range(1000):
+    curr_site = last_site - i
+    ids = get_ids_we_want(curr_site)
+    towD_ids[curr_site] = ids
+    sys.stderr.write(str(curr_site)+"\n")
+
+df = pd.DataFrame([towD_ids])
+df.to_csv("test1")
 # make loop
 # also add date
 # create dataframe
